@@ -1,4 +1,8 @@
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=18276556&assignment_repo_type=AssignmentRepo)
+<script type="text/javascript" async 
+src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
 # Homework - Adversarial Search ♔♕♗♘♙♖
 
 Topics: Minimax and AlphaBeta
@@ -17,6 +21,7 @@ You must complete this section before moving on to the second half of the homewo
 ![Game Tree](MIN_MAX1.jpg)
 
 2. Add your [NetworkX](https://networkx.org/) rendering here (it does not need to look exactly like the above image):
+![ini Game Tree](./output/Initial_Game_Tree.png)
 
 3. Create a Minimax tree search function that will accept the tree you generated from Step 1 and compute the minimax value of the tree, updating the value of each node as it goes.
 
@@ -25,7 +30,7 @@ You must complete this section before moving on to the second half of the homewo
 5. Create an AlphaBeta tree search function that will accept the tree you generated from 1 and compute the minimax value of the tree using alpha-beta pruning, eliminating edges as it goes.
 
 6. Render your new version of the search tree showing the pruned edges from alpha-beta pruning (i.e. if your algorithm decides not to search an edge color it something different). Add your rendering here:
-
+![res Game Tree](./output/AlphaBeta_Result.png)
 
 If you need an example of what it can look like, see the below reference (without the nodes being labeled as A, B, ...) again originally from geeksforgeeks.
 
@@ -177,20 +182,88 @@ Ensure that your chessbot follows normal PyDoc specs for documentation and reada
 Update the README to answer the following questions:
 
 1. Describe your experiences implementing these algorithms. What things did you learn? What aspects were a challenge?
+```
+I learned how these algorithms build game trees, explore moves, and backpropagate scores. The challenge was managing branching and applying alpha-beta pruning correctly. The evaluation function proved crucial, helping make better decisions despite depth limits. Overall, alpha-beta with evaluation function made the search faster and more effective.
+```
 2. These algorithms assumed that you could reach the leaves of the tree and then reverse your way through it to "solve" the game. In our game (chess) that was not feasible. How effective do you feel that the depth limited search with an evaluation function was in selecting good moves? If you play chess, were you able to beat your bot? If so, why did you beat it? If not, what made the bot so strong - the function or the search?
+```
+Depth-limited search with an evaluation function worked pretty well for picking decent moves. Since I don’t play chess, my bot beat me every time, which shows that even with limited depth, a solid evaluation function and good search can outperform a beginner. In my case, the bot’s strength came from its ability to analyze positions systematically, not deep strategy.
+```
 3. Shannon wrote "... it is possible for the machine to play legal chess, merely making a randomly chosen legal move at each turn to move. The level of play with such a strategy is unbelievably bad. The writer played a few games against this random strategy and was able to checkmate generally in four or five moves (by fool's mate, etc.)" Did you try playing the provided random chessbot and if so, what this your experience? How did your chessbot do against the random bot in your tests?
+```
+It was pretty funny that my bot sometimes lost to the random one, even though I don’t even play chess. After tweaking the evaluation function, I could always win as White, but as Black, the random bot still beat mine easily. It really showed me how much the evaluation function matters and how small changes can totally change the game.
+```
 4. Explain the what would happen against an opponent who tries to maximize their own utility instead of minimizing yours.
+```
+I don’t think maximizing my own score instead of minimizing my opponent’s would change much since chess is a zero-sum game. My evaluation function already works that way—it just evaluates the board based on piece values, adding points for my pieces and subtracting for the opponent’s. In the end, whether I maximize my own score or minimize theirs, the best move stays the same.
+```
 5. What is the "horizon" and how is it used in adversarial tree search?
+```
+The horizon is the depth limit of a search tree, beyond which the algorithm can’t see. This leads to the horizon effect, where the bot fails to anticipate key events just beyond its search range—like delaying an unavoidable loss or missing a winning move.
+
+To handle this, I used iterative deepening to gradually extend depth, move ordering to improve efficiency, and depth-limited evaluation to keep searches practical. While deeper searches reduce the horizon effect, strong evaluation functions and Alpha-Beta pruning help make the best decisions within limited depth.
+```
 6. (Optional - Not Graded) What did you think of this homework? Challenging? Difficult? Fun? Worth-while? Useful? Etc.?
+```
+I think this also was a really interesting assignment. It was definitely challenging, and I don't think I could have completed it without GenAI. But with its explanations and hands-on coding, I got a much better understanding of how chess AI works. Compared to other more tedious assignments, this project feels more worthwhile—plus, having it on my GitHub could be a great advantage.
+```
 
 ---
 
 ### Your Images Here
 
 Add the images that you created from the forced opening that you chose so that it demonstrates AlphaBeta Pruning.
+![ini Game Tree](./output/minimax_tree.png)
 
 ### Your Evaluation Function Here
 
 Conciesly and effictively describe the evaluation function that you used for your chessbot. You can also use Latex as long as you explain the symbols and justify why you created your function in the manner with which you did.
 
 $$f(X,n) = X_n + X_{n-1}$$
+## Evaluation Function
+
+Let **f(board)** be the overall evaluation from White’s perspective. Then:
+
+$$
+f(\text{board}) =
+\underbrace{\text{Material}(\text{board})}_{\text{sum of piece values}}
++ \underbrace{0.1 \times 
+\bigl( \text{Mobility}_W - \text{Mobility}_B \bigr)}_{\text{legal moves defference}}
++ \underbrace{\text{CenterControl}(\text{board})}_{\text{pawns/knights bonus}}
+$$
+
+Where:
+
+### Material
+We sum up the piece values for all squares:
+
+$$
+\text{Material}(\text{board}) =
+\sum_{s \in \text{all squares}}
+\begin{cases}
++v(\text{piece}), & \text{if piece is White},\\
+-v(\text{piece}), & \text{if piece is Black},\\
+0, & \text{if empty}.
+\end{cases}
+$$
+
+with typical piece values:
+
+$$
+v(\text{pawn})=100, \quad
+v(\text{knight})=320, \quad
+v(\text{bishop})=330, \quad
+v(\text{rook})=500, \quad
+v(\text{queen})=900, \quad
+v(\text{king})=0.
+$$
+
+### Mobility
+We measure the number of legal moves for White minus the number of legal moves for Black:
+
+$$
+\text{Mobility}_W = \bigl|\text{legalMoves}_W\bigr|, \quad
+\text{Mobility}_B = \bigl|\text{legalMoves}_B\bigr|.
+$$
+
+Then we weight that difference by \( 0.1 \).
