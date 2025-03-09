@@ -223,7 +223,7 @@ $$f(X,n) = X_n + X_{n-1}$$
 ## Evaluation Function
 
 Let **f(board)** be the overall evaluation from White’s perspective. Then:
-
+![EF](./output/EF.png)
 $$
 f(\text{board}) =
 \underbrace{\text{Material}(\text{board})}_{\text{sum of piece values}}
