@@ -191,7 +191,7 @@ Depth-limited search with an evaluation function worked pretty well for picking 
 ```
 3. Shannon wrote "... it is possible for the machine to play legal chess, merely making a randomly chosen legal move at each turn to move. The level of play with such a strategy is unbelievably bad. The writer played a few games against this random strategy and was able to checkmate generally in four or five moves (by fool's mate, etc.)" Did you try playing the provided random chessbot and if so, what this your experience? How did your chessbot do against the random bot in your tests?
 ```
-It was pretty funny that my bot sometimes lost to the random one, even though I don’t even play chess. After tweaking the evaluation function, I could always win as White, but as Black, the random bot still beat mine easily. It really showed me how much the evaluation function matters and how small changes can totally change the game.
+It was pretty funny that my bot sometimes lost to the random one. After tweaking the evaluation function, it could always win as White, but as Black, it still struggled and sometimes lost. It really showed me how much the evaluation function matters and how small changes can make a huge difference.
 ```
 4. Explain the what would happen against an opponent who tries to maximize their own utility instead of minimizing yours.
 ```
@@ -224,6 +224,7 @@ $$f(X,n) = X_n + X_{n-1}$$
 
 Let **f(board)** be the overall evaluation from White’s perspective. Then:
 ![EF](./output/EF.png)
+
 $$
 f(\text{board}) =
 \underbrace{\text{Material}(\text{board})}_{\text{sum of piece values}}
