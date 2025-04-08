@@ -68,7 +68,7 @@ $$
 pip install chess pydot networkx pyinstaller
 
 # Run the bot against UCI commands
-python random_chess_bot.py
+python boba_slayer.py
 
 # Visualize a Minimax tree from a fixed opening
-python random_chess_bot.py draw
+python boba_slayer.py draw
