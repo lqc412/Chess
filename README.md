@@ -1,4 +1,4 @@
-# ♟️ ChessGPT: Minimax & Alpha-Beta Pruning Chess Bot
+# ♟️ Chess: Minimax & Alpha-Beta Pruning Chess Bot
 
 A lightweight Python chess engine built using adversarial search techniques, including Minimax and Alpha-Beta pruning. The bot evaluates board states using a handcrafted evaluation function and visualizes game tree decisions.
 
